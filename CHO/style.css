@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  font-family: Arial;
+  color: white;
+}
+
+/* background canvas */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* main box */
+.box {
+  width: 340px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: 0.5s;
+}
+
+/* glowing text */
+.glow {
+  text-shadow:
+    0 0 5px #ff2d55,
+    0 0 10px #ff2d55,
+    0 0 20px #ff4d6d;
+}
+
+/* fade animation */
+.fade {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* input */
+input {
+  width: 90%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #111;
+  color: white;
+}
+
+/* button */
+button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  background: #ff2d55;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  box-shadow: 0 0 15px #ff2d55;
+}
+
+/* media */
+.media {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: none;
+  margin: 10px;
+}
+
+/* gallery */
+.gallery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}

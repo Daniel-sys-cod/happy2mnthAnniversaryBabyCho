@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Message</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #111, #000);
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* hearts */
+.heart {
+  position: absolute;
+  color: rgba(255, 60, 120, 0.7);
+  font-size: 18px;
+  animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* box */
+.box {
+  width: 320px;
+  padding: 25px;
+  text-align: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.glow {
+  text-shadow: 0 0 10px #ff2d55;
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #111;
+  color: white;
+}
+
+button {
+  margin-top: 12px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #ff2d55;
+  color: white;
+  cursor: pointer;
+}
+
+/* media */
+.media {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: none;
+}
+
+/* arrows */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  cursor: pointer;
+  color: white;
+  text-shadow: 0 0 10px #ff2d55;
+}
+
+#left { left: 20px; }
+#right { right: 20px; }
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="box">
+
+  <h2 id="question" class="glow">Do you love me?</h2>
+
+  <input id="answer" placeholder="Type here...">
+  <button onclick="checkAnswer()">Submit</button>
+
+  <img id="img" class="media">
+  <video id="vid" class="media" controls></video>
+
+</div>
+
+<div id="left" class="arrow" onclick="prev()">⬅</div>
+<div id="right" class="arrow" onclick="next()">➡</div>
+
+<script>
+
+/* ---------------- BACKGROUND ---------------- */
+
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+const words=["I love U","I love Cho","I love Cho Hay Thi Chan"];
+
+const items=[];
+
+for(let i=0;i<40;i++){
+  items.push({
+    text:words[Math.floor(Math.random()*words.length)],
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    speed:1+Math.random()*2,
+    size:18+Math.random()*15
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  items.forEach(w=>{
+    w.y+=w.speed;
+
+    if(w.y>canvas.height) w.y=-20;
+
+    ctx.fillStyle="white";
+    ctx.font=w.size+"px Arial";
+    ctx.fillText(w.text,w.x,w.y);
+  });
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+
+/* ---------------- HEARTS ---------------- */
+
+function heart(){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="❤";
+  h.style.left=Math.random()*window.innerWidth+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+}
+setInterval(heart,300);
+
+
+/* ---------------- SMART QUIZ (UPDATED) ---------------- */
+
+let step=1;
+
+function checkAnswer(){
+  let q=document.getElementById("question");
+  let a=document.getElementById("answer").value.toLowerCase();
+
+  const yesWords=[
+    "yes","yeah","yeahh","yess","ofc","ofcourse",
+    "fuck yeah","hell yeah"
+  ];
+
+  const isYes = yesWords.some(word => a.includes(word));
+
+  if(step===1){
+    if(isYes){
+      q.innerText="What do you love about me?";
+    } else {
+      q.innerText="Why not I love u soo much 💔 Why do you feel that way?";
+    }
+    step=2;
+  }
+
+  else if(step===2){
+    q.innerText="I LOVE U SOOOOO MUCH ❤️";
+    step=3;
+  }
+
+  else if(step===3){
+    q.innerText="Happy 2 Month Anniversary Baby (Cho) ❤️";
+    document.getElementById("answer").style.display="none";
+    document.querySelector("button").style.display="none";
+    load();
+  }
+
+  document.getElementById("answer").value="";
+}
+
+
+/* ---------------- GALLERY ---------------- */
+
+const media=[
+  {type:"img",src:"Photo1.png"},
+  {type:"img",src:"Photo2.png"},
+  {type:"img",src:"Photo3.png"},
+  {type:"vid",src:"Video1.mp4"},
+  {type:"vid",src:"Video2.mp4"}
+];
+
+let index=0;
+
+function load(){show();}
+
+function show(){
+  let img=document.getElementById("img");
+  let vid=document.getElementById("vid");
+
+  let item=media[index];
+
+  img.style.display="none";
+  vid.style.display="none";
+
+  if(item.type==="img"){
+    img.src=item.src;
+    img.style.display="block";
+  } else {
+    vid.src=item.src;
+    vid.style.display="block";
+  }
+}
+
+function next(){
+  index++;
+  if(index>=media.length) index=0;
+  show();
+}
+
+function prev(){
+  index--;
+  if(index<0) index=media.length-1;
+  show();
+}
+
+</script>
+
+</body>
+</html>
